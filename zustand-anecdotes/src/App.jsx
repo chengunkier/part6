@@ -1,4 +1,5 @@
 import useAnecdoteStore from './store'
+import AnecdoteForm from './components/AnecdoteForm'
 
 const App = () => {
   const anecdotes = useAnecdoteStore((state) => state.anecdotes)
@@ -16,6 +17,7 @@ const App = () => {
           </div>
         </div>
       ))}
+      <AnecdoteForm />
     </div>
   )
 }
