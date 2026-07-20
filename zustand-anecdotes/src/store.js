@@ -1,26 +1,7 @@
 import { create } from 'zustand'
 
-const anecdotesAtStart = [
-  'If it hurts, do it more often',
-  'Adding manpower to a late software project makes it later!',
-  'The first 90 percent of the code accounts for the first 90 percent of the development time...',
-  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-  'Premature optimization is the root of all evil.',
-  'Debugging is twice as hard as writing the code in the first place...',
-]
-
-const getId = () => (100000 * Math.random()).toFixed(0)
-
-const asObject = (anecdote) => ({
-  content: anecdote,
-  id: getId(),
-  votes: 0,
-})
-
-const initialState = anecdotesAtStart.map(asObject)
-
 const useAnecdoteStore = create((set) => ({
-  anecdotes: initialState,
+  anecdotes: [],
   filter: '',
   voteAnecdote: (id) =>
     set((state) => ({
@@ -32,11 +13,18 @@ const useAnecdoteStore = create((set) => ({
     })),
   createAnecdote: (content) =>
     set((state) => ({
-      anecdotes: [...state.anecdotes, asObject(content)],
+      anecdotes: [
+        ...state.anecdotes,
+        { content, id: (100000 * Math.random()).toFixed(0), votes: 0 },
+      ],
     })),
   filterChange: (filter) =>
     set(() => ({
       filter,
+    })),
+  setAnecdotes: (anecdotes) =>
+    set(() => ({
+      anecdotes,
     })),
 }))
 
