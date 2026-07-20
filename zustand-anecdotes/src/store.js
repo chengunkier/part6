@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import anecdoteService from './services/anecdotes'
 
 const useAnecdoteStore = create((set) => ({
   anecdotes: [],
@@ -11,13 +12,12 @@ const useAnecdoteStore = create((set) => ({
           : anecdote
       ),
     })),
-  createAnecdote: (content) =>
+  createAnecdote: async (content) => {
+    const newAnecdote = await anecdoteService.createNew(content)
     set((state) => ({
-      anecdotes: [
-        ...state.anecdotes,
-        { content, id: (100000 * Math.random()).toFixed(0), votes: 0 },
-      ],
-    })),
+      anecdotes: [...state.anecdotes, newAnecdote],
+    }))
+  },
   filterChange: (filter) =>
     set(() => ({
       filter,
