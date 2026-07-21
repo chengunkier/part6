@@ -1,5 +1,6 @@
 import { useAnecdotes, useVoteAnecdoteMutation } from './hooks'
 import AnecdoteForm from './components/AnecdoteForm'
+import Notification from './components/Notification'
 
 const App = () => {
   const result = useAnecdotes()
@@ -22,6 +23,8 @@ const App = () => {
   return (
     <div>
       <h3>Anecdote app</h3>
+
+      <Notification />
 
       <AnecdoteForm />
 
