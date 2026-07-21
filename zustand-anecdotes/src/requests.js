@@ -8,3 +8,16 @@ export const getAnecdotes = () => {
     return response.json()
   })
 }
+
+export const createAnecdote = (newAnecdote) => {
+  return fetch(baseUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(newAnecdote),
+  }).then((response) => {
+    if (!response.ok) {
+      throw new Error(`Network response was not ok: ${response.status}`)
+    }
+    return response.json()
+  })
+}
