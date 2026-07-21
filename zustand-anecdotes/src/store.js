@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import anecdoteService from './services/anecdotes'
 import useNotificationStore from './notificationStore'
 
-const useAnecdoteStore = create((set) => ({
+const useAnecdoteStore = create((set, get) => ({
   anecdotes: [],
   filter: '',
   voteAnecdote: (id) =>
@@ -35,6 +35,21 @@ const useAnecdoteStore = create((set) => ({
     useNotificationStore
       .getState()
       .setNotification(`you created '${newAnecdote.content}'`)
+  },
+  removeAnecdote: async (id) => {
+    const anecdoteToRemove = get().anecdotes.find(
+      (anecdote) => anecdote.id === id
+    )
+
+    await anecdoteService.remove(id)
+
+    set((state) => ({
+      anecdotes: state.anecdotes.filter((anecdote) => anecdote.id !== id),
+    }))
+
+    useNotificationStore
+      .getState()
+      .setNotification(`you removed '${anecdoteToRemove.content}'`)
   },
   filterChange: (filter) =>
     set(() => ({

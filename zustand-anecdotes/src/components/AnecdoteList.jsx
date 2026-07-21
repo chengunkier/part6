@@ -4,6 +4,7 @@ const AnecdoteList = () => {
   const anecdotes = useAnecdoteStore((state) => state.anecdotes)
   const filter = useAnecdoteStore((state) => state.filter)
   const voteAnecdote = useAnecdoteStore((state) => state.voteAnecdote)
+  const removeAnecdote = useAnecdoteStore((state) => state.removeAnecdote)
 
   const filteredAnecdotes = anecdotes.filter((anecdote) =>
     anecdote.content.toLowerCase().includes(filter.toLowerCase())
@@ -21,6 +22,11 @@ const AnecdoteList = () => {
           <div>
             has {anecdote.votes}
             <button onClick={() => voteAnecdote(anecdote.id)}>vote</button>
+            {anecdote.votes === 0 && (
+              <button onClick={() => removeAnecdote(anecdote.id)}>
+                delete
+              </button>
+            )}
           </div>
         </div>
       ))}

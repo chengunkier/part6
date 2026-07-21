@@ -35,4 +35,15 @@ const update = (id, updatedAnecdote) => {
   })
 }
 
-export default { getAll, createNew, update }
+const remove = (id) => {
+  return fetch(`${baseUrl}/${id}`, {
+    method: 'DELETE',
+  }).then((response) => {
+    if (!response.ok) {
+      throw new Error(`Network response was not ok: ${response.status}`)
+    }
+    return id
+  })
+}
+
+export default { getAll, createNew, update, remove }
