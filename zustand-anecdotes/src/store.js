@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import anecdoteService from './services/anecdotes'
+import useNotificationStore from './notificationStore'
 
 const useAnecdoteStore = create((set) => ({
   anecdotes: [],
@@ -16,6 +17,10 @@ const useAnecdoteStore = create((set) => ({
 
       anecdoteService.update(id, votedAnecdote)
 
+      useNotificationStore
+        .getState()
+        .setNotification(`you voted '${votedAnecdote.content}'`)
+
       return {
         anecdotes: state.anecdotes.map((anecdote) =>
           anecdote.id === id ? votedAnecdote : anecdote
@@ -27,6 +32,9 @@ const useAnecdoteStore = create((set) => ({
     set((state) => ({
       anecdotes: [...state.anecdotes, newAnecdote],
     }))
+    useNotificationStore
+      .getState()
+      .setNotification(`you created '${newAnecdote.content}'`)
   },
   filterChange: (filter) =>
     set(() => ({
