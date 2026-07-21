@@ -1,30 +1,32 @@
-import { useEffect } from 'react'
-import useAnecdoteStore from './store'
-import anecdoteService from './services/anecdotes'
-import AnecdoteForm from './components/AnecdoteForm'
-import AnecdoteList from './components/AnecdoteList'
-import Filter from './components/Filter'
-import Notification from './components/Notification'
+import { useQuery } from '@tanstack/react-query'
+import { getAnecdotes } from './requests'
 
 const App = () => {
-  const setAnecdotes = useAnecdoteStore((state) => state.setAnecdotes)
+  const result = useQuery({
+    queryKey: ['anecdotes'],
+    queryFn: getAnecdotes,
+    retry: false,
+  })
 
-  useEffect(() => {
-    anecdoteService
-      .getAll()
-      .then((anecdotes) => setAnecdotes(anecdotes))
-      .catch((error) => {
-        console.error('Failed to fetch anecdotes:', error)
-      })
-  }, [setAnecdotes])
+  if (result.isPending) {
+    return <div>loading data...</div>
+  }
+
+  if (result.isError) {
+    return <div>anecdote service not available due to problems in server</div>
+  }
+
+  const anecdotes = result.data
 
   return (
     <div>
-      <h2>Anecdotes</h2>
-      <Notification />
-      <Filter />
-      <AnecdoteList />
-      <AnecdoteForm />
+      <h3>Anecdote app</h3>
+      {anecdotes.map((anecdote) => (
+        <div key={anecdote.id}>
+          <div>{anecdote.content}</div>
+          <div>has {anecdote.votes} votes</div>
+        </div>
+      ))}
     </div>
   )
 }
