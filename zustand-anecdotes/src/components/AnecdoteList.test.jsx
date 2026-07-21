@@ -24,4 +24,14 @@ describe('<AnecdoteList />', () => {
 
     expect(contentElements).toEqual(['high votes', 'medium votes', 'low votes'])
   })
+
+  test('only anecdotes matching the filter are rendered', () => {
+    useAnecdoteStore.setState({ filter: 'high' })
+
+    render(<AnecdoteList />)
+
+    expect(screen.getByText('high votes')).toBeInTheDocument()
+    expect(screen.queryByText('low votes')).not.toBeInTheDocument()
+    expect(screen.queryByText('medium votes')).not.toBeInTheDocument()
+  })
 })
