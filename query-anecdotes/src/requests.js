@@ -21,16 +21,3 @@ export const createAnecdote = (newAnecdote) => {
     return response.json()
   })
 }
-
-export const updateAnecdote = (updatedAnecdote) => {
-  return fetch(`${baseUrl}/${updatedAnecdote.id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(updatedAnecdote),
-  }).then((response) => {
-    if (!response.ok) {
-      throw new Error(`Network response was not ok: ${response.status}`)
-    }
-    return response.json()
-  })
-}
