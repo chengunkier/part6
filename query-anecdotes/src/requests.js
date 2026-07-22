@@ -9,17 +9,20 @@ export const getAnecdotes = () => {
   })
 }
 
-export const createAnecdote = (newAnecdote) => {
-  return fetch(baseUrl, {
+export const createAnecdote = async (newAnecdote) => {
+  const response = await fetch(baseUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(newAnecdote),
-  }).then((response) => {
-    if (!response.ok) {
-      throw new Error(`Network response was not ok: ${response.status}`)
-    }
-    return response.json()
   })
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null)
+    const message = (errorData && errorData.error) || 'anecdote creation failed'
+    throw new Error(message)
+  }
+
+  return response.json()
 }
 
 export const updateAnecdote = (updatedAnecdote) => {

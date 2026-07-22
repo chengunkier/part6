@@ -27,6 +27,9 @@ export const useCreateAnecdoteMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
       showNotification(dispatch, `anecdote '${newAnecdote.content}' created`)
     },
+    onError: (error) => {
+      showNotification(dispatch, error.message)
+    },
   })
 }
 
